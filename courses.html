@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Courses - Your YouTube Channel</title>
+  <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Header -->
+  <header class="site-header">
+    <div class="container">
+      <div class="header-content">
+        <a href="index.html" class="logo">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="video-icon">
+            <polygon points="23 7 16 12 23 17 23 7"></polygon>
+            <rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>
+          </svg>
+          <span class="logo-text">YourChannel</span>
+        </a>
+        <nav class="main-nav">
+          <a href="index.html" class="nav-link">Home</a>
+          <a href="about.html" class="nav-link">About</a>
+          <a href="projects.html" class="nav-link">Projects</a>
+          <a href="courses.html" class="nav-link active">Courses</a>
+          <a href="contact.html" class="nav-link">Contact</a>
+        </nav>
+        <div class="header-actions">
+          <a href="https://youtube.com/c/yourchannel" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-sm desktop-only">
+            Subscribe on YouTube
+          </a>
+          <button class="btn btn-icon mobile-only" id="menu-toggle">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="3" y1="12" x2="21" y2="12"></line>
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+            <span class="sr-only">Toggle menu</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Menu -->
+  <div class="mobile-menu" id="mobile-menu">
+    <div class="mobile-menu-container">
+      <div class="mobile-menu-header">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="video-icon">
+          <polygon points="23 7 16 12 23 17 23 7"></polygon>
+          <rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>
+        </svg>
+        <span class="logo-text">YourChannel</span>
+        <button class="close-menu" id="close-menu">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      <nav class="mobile-nav">
+        <a href="index.html" class="mobile-nav-link">Home</a>
+        <a href="about.html" class="mobile-nav-link">About</a>
+        <a href="projects.html" class="mobile-nav-link">Projects</a>
+        <a href="courses.html" class="mobile-nav-link active">Courses</a>
+        <a href="contact.html" class="mobile-nav-link">Contact</a>
+        <a href="https://youtube.com/c/yourchannel" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-full">
+          Subscribe on YouTube
+        </a>
+      </nav>
+    </div>
+  </div>
+
+  <main>
+    <!-- Hero Section -->
+    <section class="hero courses-hero">
+      <div class="container">
+        <div class="section-header text-center">
+          <h1 class="hero-title">Courses & Learning Paths</h1>
+          <p class="hero-description">
+            Comprehensive courses designed to take you from beginner to professional. Learn at your own pace with
+            project-based curriculum.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Search and Filter Section -->
+    <section class="search-section">
+      <div class="container">
+        <div class="search-container">
+          <div class="search-box">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="search-icon">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input type="search" placeholder="Search courses..." class="search-input">
+          </div>
+          <button class="btn btn-outline btn-icon filter-button
