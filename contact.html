@@ -6,13 +6,38 @@
   <title>Contact - Your YouTube Channel</title>
   <link rel="stylesheet" href="styles.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+
   <style>
+
+   :root {
+  --radius: 12px;
+  --border: #444;
+  --ring: #6a11cb;
+  --primary: #6a11cb;
+  --muted-foreground:  #d1d1d1;
+}
+
+
+    body {
+      font-family: 'Poppins', sans-serif;
+     background: linear-gradient(to right, #0f0c29, #302b63, #24243e);
+     color: white;
+    }
+
+
     /* Additional styles specific to contact page */
     .contact-grid {
       display: grid;
       gap: 2rem;
     }
     
+  .contact-card,
+.faq-card {
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+
     @media (min-width: 1024px) {
       .contact-grid {
         grid-template-columns: 1fr 1fr;
@@ -24,7 +49,22 @@
       flex-direction: column;
       gap: 1.5rem;
     }
+
+    .contact-icon {
+  font-size: 1.5rem;
+  color: #6a11cb;
+}
+
     
+    .form-container {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border-radius: 16px;
+  padding: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+
     .form-group {
       display: flex;
       flex-direction: column;
@@ -114,6 +154,17 @@
       font-size: 0.875rem;
       color: var(--muted-foreground);
     }
+
+
+    button {
+  transition: all 0.3s ease;
+}
+
+button:hover {
+  background-color: #6a11cb;
+  transform: scale(1.05);
+}
+
     
     .social-grid {
       display: flex;
@@ -149,6 +200,33 @@
       font-size: 0.875rem;
       color: var(--muted-foreground);
     }
+
+
+    .hero {
+  padding: 80px 20px;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.03);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.section-header {
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.hero-title {
+  font-size: 3rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 1rem;
+}
+
+.hero-description {
+  font-size: 1.125rem;
+  color: #ccc;
+  line-height: 1.6;
+}
+
   </style>
 </head>
 <body>
@@ -248,7 +326,7 @@
               </svg>
               <div class="contact-details">
                 <span class="contact-title">Email</span>
-                <a href="mailto:hello@yourchannel.com" class="contact-value">hello@yourchannel.com</a>
+                <a href="mailto:hello@yourchannel.com" class="contact-value">mohshinmansuri123@gmail.com</a>
               </div>
             </div>
             <div class="contact-card">
@@ -258,7 +336,7 @@
               </svg>
               <div class="contact-details">
                 <span class="contact-title">Location</span>
-                <span class="contact-value">San Francisco, California</span>
+                <span class="contact-value">Maheshwar, Madhya Pradesh</span>
               </div>
             </div>
             <div class="contact-card">
@@ -267,7 +345,7 @@
               </svg>
               <div class="contact-details">
                 <span class="contact-title">Phone</span>
-                <span class="contact-value">+1 (555) 123-4567</span>
+                <span class="contact-value">+91 76111 65746</span>
               </div>
             </div>
             <div>
@@ -535,4 +613,7 @@
     });
   </script>
 </body>
+
+<div class="form-container" data-aos="fade-up" data-aos-duration="800">
+
 </html>
