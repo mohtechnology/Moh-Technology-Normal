@@ -300,7 +300,7 @@ html {
 }
 
 .btn-primary:hover {
-  background-color: #011af8; /* Darker red */
+  background-color: #011af8; 
 }
 
 .btn-outline {
@@ -503,7 +503,7 @@ html {
 /* Section Styles */
 section {
   width: 100%;
-  padding: 3rem 0;
+  padding: 1rem 0;
 }
 
 @media (min-width: 768px) {
