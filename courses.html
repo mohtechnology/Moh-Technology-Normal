@@ -1,655 +1,1114 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>YourChannel | Courses</title>
-  <script defer src="script.js"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Courses - Your YouTube Channel</title>
+  <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* Additional styles specific to courses page */
+    .search-container {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .search-input-container {
+      position: relative;
+      flex: 1;
+    }
+    
+    .search-icon {
+      position: absolute;
+      left: 0.625rem;
+      top: 0.625rem;
+      color: var(--muted-foreground);
+    }
+    
+    .search-input {
+      width: 100%;
+      padding: 0.5rem 0.5rem 0.5rem 2rem;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      background-color: var(--background);
+      font-size: 0.875rem;
+    }
+    
+    .search-input:focus {
+      outline: none;
+      border-color: var(--ring);
+      box-shadow: 0 0 0 2px rgba(148, 163, 184, 0.2);
+    }
+    
+    .filter-button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 2.5rem;
+      height: 2.5rem;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      background-color: var(--background);
+    }
+    
+    .filter-button:hover {
+      background-color: var(--accent);
+    }
+    
+    .course-tabs {
+      display: flex;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 1.5rem;
+      overflow-x: auto;
+    }
+    
+    .course-tab {
+      padding: 0.5rem 1rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--muted-foreground);
+      border-bottom: 2px solid transparent;
+      background: none;
+      border-top: none;
+      border-left: none;
+      border-right: none;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    
+    .course-tab.active {
+      color: var(--foreground);
+      border-bottom-color: var(--primary);
+    }
+    
+    .course-grid {
+      display: grid;
+      gap: 1.5rem;
+    }
+    
+    @media (min-width: 640px) {
+      .course-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    
+    @media (min-width: 1024px) {
+      .course-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+    
+    .course-card {
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      overflow: hidden;
+    }
+    
+    .course-image {
+      position: relative;
+      aspect-ratio: 16 / 9;
+    }
+    
+    .course-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .course-badge {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 1rem;
+      background: linear-gradient(to top, rgba(0, 0, 0, 0.6), transparent);
+    }
+    
+    .level-badge {
+      font-size: 0.75rem;
+      padding: 0.25rem 0.5rem;
+      border-radius: var(--radius);
+      color: white;
+    }
+    
+    .beginner {
+      background-color: #16a34a;
+    }
+    
+    .intermediate {
+      background-color: #ca8a04;
+    }
+    
+    .advanced {
+      background-color: #dc2626;
+    }
+    
+    .course-content {
+      padding: 1.5rem;
+    }
+    
+    .course-title {
+      font-size: 1.125rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+    
+    .course-description {
+      font-size: 0.875rem;
+      color: var(--muted-foreground);
+      margin-bottom: 1rem;
+    }
+    
+    .course-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.875rem;
+      margin-bottom: 1rem;
+    }
+    
+    .meta-item {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+    
+    .star-icon {
+      color: #f59e0b;
+      fill: #f59e0b;
+    }
+    
+    .learning-paths-grid {
+      display: grid;
+      gap: 1.5rem;
+    }
+    
+    @media (min-width: 768px) {
+      .learning-paths-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    
+    @media (min-width: 1024px) {
+      .learning-paths-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+    
+    .path-card {
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      padding: 1.5rem;
+    }
+    
+    .path-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+    }
+    
+    .path-description {
+      font-size: 0.875rem;
+      color: var(--muted-foreground);
+      margin-bottom: 1rem;
+    }
+    
+    .progress-container {
+      margin-bottom: 1rem;
+    }
+    
+    .progress-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.875rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .progress-bar {
+      height: 0.5rem;
+      background-color: var(--muted);
+      border-radius: 9999px;
+      overflow: hidden;
+    }
+    
+    .progress-value {
+      height: 100%;
+      background-color: var(--primary);
+    }
+    
+    .course-list {
+      margin-top: 1rem;
+    }
+    
+    .course-list-title {
+      font-size: 0.875rem;
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+    }
+    
+    .course-list-items {
+      list-style: none;
+      font-size: 0.875rem;
+      color: var(--muted-foreground);
+    }
+    
+    .course-list-items li {
+      margin-bottom: 0.25rem;
+    }
+    
+    .featured-course {
+      display: grid;
+      gap: 1.5rem;
+    }
+    
+    @media (min-width: 1024px) {
+      .featured-course {
+        grid-template-columns: 1fr 1fr;
+        align-items: center;
+      }
+    }
+    
+    .featured-course-image {
+      position: relative;
+      aspect-ratio: 16 / 9;
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    
+    .featured-course-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .play-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .play-button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 4rem;
+      height: 4rem;
+      border-radius: 9999px;
+      background-color: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(4px);
+      border: none;
+      cursor: pointer;
+    }
+    
+    .featured-course-content {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    
+    .rating {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .stars {
+      display: flex;
+    }
+    
+    .check-list {
+      display: grid;
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+    }
+    
+    @media (min-width: 640px) {
+      .check-list {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    
+    .check-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.875rem;
+      color: var(--muted-foreground);
+    }
+    
+    .check-icon {
+      color: #22c55e;
+    }
+  </style>
 </head>
-<style>
-  * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  font-family: 'Segoe UI', sans-serif;
-  background-color: #041430;
-  color: #a4a1a1;
-  margin: 0;
-  padding: 40px;
-}
-
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 1rem;
-  padding-bottom: 40px;
-  padding-top: 40px;
-}
-
-/* Navbar */
-header {
-  background: rgb(17, 15, 15);
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-.nav {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem 0;
-}
-.logo {
-  font-weight: bold;
-  color: rgb(186, 186, 207);
-}
-nav a {
-  margin: 0 1rem;
-  text-decoration: none;
-  color: #bdafaf;
-}
-nav a.active,
-nav a:hover {
-  color: rgb(90, 2, 255);
-}
-
-.youtube-btn {
-  background: rgb(4, 3, 18);
-  color: rgb(252, 248, 248);
-  padding: 0.5rem 1rem;
-  border-radius: 5px;
-}
-
-/* Hero Section */
-.hero {
-  text-align: center;
-  padding: 3rem 1rem;
-}
-.hero h2 {
-  font-size: 2rem;
-  margin-bottom: 0.5rem;
-}
-
-/* Filters */
-.filters {
-  margin-top: 1rem;
-  margin-bottom: 2rem;
-}
-.filters input {
-  width: 100%;
-  padding: 0.75rem;
-  margin-bottom: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
-.tabs {
-  display: flex;
-  gap: 0.5rem;
-  flex-wrap: wrap;
-}
-.tab {
-  padding: 0.5rem 1rem;
-  background: #eee;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-.tab.active {
-  background-color: red;
-  color: white;
-}
-
-
-.tabs .tab {
-  padding: 0.5rem 1rem;
-  background: #eee;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  color: black;
-  font-weight: bold;
-}
-
-.tabs .tab:hover {
-  background-color: #ff4c4c;  
-  color: white;
-  transform: scale(1.05);    
-  box-shadow: 0 0 10px #ff4c4c; 
-}
-
-
-
-.tab.active:hover{
-  transform: translateY(-5);
-}
-/* Courses Grid */
-.course-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 40px;
-  max-width: 1000px;
-  margin: 40px auto;
-}
-
-.course-card {
- background: white;
- color: #000;
-  border: 1px solid #ddd;
-  padding: 50px;
-  border-radius: 10px;
-  width: 300px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-  text-align: center;
-  transition: transform 0.3s ease;
-  gap: 50px;
- 
-}
-.course-card:hover {
-  transform: translateY(-5px);
-   box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-}
-
-.course-card img {
-  width: 100%;
-  border-radius: 10px;
-  width: 60px;
-}
-
-.course-card .label {
-  display: inline-block;
-  margin-top: 0.5rem;
-  padding: 4px 8px;
-  border-radius: 4px;
-  font-size: 12px;
-  background: green;
-  color: white;
-  margin-bottom: 8px
-}
-
-.lebel.beginner { background: #28a745; color: white; }
-.lebel.intermediate { background: #ffc107; color: black; }
-.lebel.advanced { background: #dc3545; color: white; }
-
-.view-btn {
-  background: black;
-  color: white;
-  border: none;
-  padding: 8px 14px;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.course-card h3 {
-  margin-top: 1rem;
-}
-.course-card .meta {
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.8rem;
-  color: #777;
-}
-.course-card .btn {
-  display: block;
-  margin-top: 1rem;
-  background: black;
-  color: white;
-  padding: 0.5rem;
-  border-radius: 5px;
-  text-align: center;
-  text-decoration: none;
-}
-
-/* Learning Paths */
-.learning-paths {
-  background: #fff;
-  padding: 4rem 1rem;
-  text-align: center;
-}
-.paths {
-  display: flex;
-  gap: 1rem;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-.path-card {
-  background: #f0f0f0;
-  padding: 2rem;
-  border-radius: 10px;
-  width: 300px;
-  transition: all 0.3 ease;
-}
-
-.path-card:hover {
-  transform: translateY(-5px);      
-  box-shadow: 0 0 15px rgba(255, 76, 76, 0.5); 
-  background-color: #fff7f7;        
-}  
-
-
-.path-card h3 {
-  margin-bottom: 0.5rem;
-}
-.path-card ul {
-  list-style: none;
-  text-align: left;
-  padding-left: 0;
-}
-.path-card ul li {
-  margin-bottom: 0.5rem;
-}
-.view-path {
-  margin-top: 1rem;
-  background: red;
-  color: white;
-  padding: 0.5rem 1rem;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-weight: bold;
-}
-
-.view-path:hover {
-  background-color: #ff4c4c;         
-  transform: scale(1.05);          
-  box-shadow: 0 0 10px #ff4c4c;     
-}
-
-/* Footer */
-footer {
-  text-align: center;
-  padding: 1.9rem;
-  background: rgb(72, 82, 148);
-  color: #777;
-  font-size: 0.8rem;
-  padding-top: 40px;
-}
-
-.course-grid {
-    display: flex;
-    flex-wrap: wrap;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 30px;
-    max-width: 1000px;
-    margin: auto;
-    justify-content: center;
-  }
-
-.course-image {
-  width: 60px;
-  height: 60px;
-  margin-bottom: 10px;
-  background-color: gray; /* placeholder bg */
-  border-radius: 50%;
-  display: inline-block;
-  }
-
-.course-title {
-  font-size: 16px;
-  font-weight: bold;
-  color: #333;
-  margin-top: 5px;
-  }
-
-.footer-bottom{
-  padding-top: 40px;
-}
-
-/* footer */
-.footer {
-  background: #fff;
-  color: #333;
-  padding: 60px 30px 30px;
-  font-family: 'Segoe UI', sans-serif;
-  border-top: 1px solid #eee;
-}
-
-.footer-container {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  max-width: 1200px;
-  margin: auto;
-}
-
-.footer-section {
-  flex: 1 1 220px;
-  margin: 20px;
-}
-
-.footer-section h3 {
-  font-size: 18px;
-  font-weight: bold;
-  margin-bottom: 15px;
-}
-
-.footer-section ul {
-  list-style: none;
-  padding: 0;
-}
-
-.footer-section ul li {
-  margin-bottom: 10px;
-  color: #777;
-}
-
-.footer-section ul li a {
-  text-decoration: none;
-  color: #777;
-  transition: color 0.3s ease;
-}
-
-.footer-section ul li a:hover {
-  color: #000;
-}
-
-.footer-section.about h2 {
-  font-size: 22px;
-  font-weight: bold;
-  margin-bottom: 10px;
-}
-
-.logo-icon {
-  font-size: 22px;
-  color: red;
-  margin-right: 5px;
-}
-
-.social-icons a {
-  margin-right: 10px;
-  font-size: 18px;
-  color: #555;
-  transition: color 0.3s ease;
-}
-
-.social-icons a:hover {
-  color: red;
-}
-
-.footer-bottom {
-  border-top: 1px solid #eee;
-  margin-top: 40px;
-  padding-top: 20px;
-  text-align: center;
-  font-size: 14px;
-  color: #999;
-}
-
-.footer-links a {
-  margin: 0 15px;
-  color: #999;
-  text-decoration: none;
-}
-
-.footer-links a:hover {
-  color: #000;
-}
-
-
-</style>
 <body>
   <!-- Header -->
-  <header>
-    <div class="container nav">
-      <h1 class="logo">YourChannel</h1>
-      <nav>
-        <a href="#">Home</a>
-        <a href="#">About</a>
-        <a href="#">Projects</a>
-        <a class="active" href="#">Courses</a>
-        <a href="#">Contact</a>
-      </nav>
-      <button class="youtube-btn">Subscribe on YouTube</button>
+  <header class="site-header">
+    <div class="container">
+      <div class="header-content">
+        <a href="index.html" class="logo">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="video-icon">
+            <polygon points="23 7 16 12 23 17 23 7"></polygon>
+            <rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>
+          </svg>
+          <span class="logo-text">YourChannel</span>
+        </a>
+        <nav class="main-nav">
+          <a href="index.html" class="nav-link">Home</a>
+          <a href="about.html" class="nav-link">About</a>
+          <a href="projects.html" class="nav-link">Projects</a>
+          <a href="courses.html" class="nav-link active">Courses</a>
+          <a href="contact.html" class="nav-link">Contact</a>
+        </nav>
+        <div class="header-actions">
+          <a href="https://youtube.com/c/yourchannel" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-sm desktop-only">
+            Subscribe on YouTube
+          </a>
+          <button class="btn btn-icon mobile-only" id="menu-toggle">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="3" y1="12" x2="21" y2="12"></line>
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+            <span class="sr-only">Toggle menu</span>
+          </button>
+        </div>
+      </div>
     </div>
   </header>
 
-  <!-- Hero Section -->
-  <section class="hero">
-    <h2>Courses & Learning Paths</h2>
-    <p>Comprehensive courses designed to take you from beginner to professional. Learn at your own pace with project-based curriculum.</p>
-  </section>
-
-  <!-- Filter & Search -->
-  <section class="filters container">
-    <input type="text" id="searchInput" placeholder="Search courses..." />
-    <div class="tabs">
-      <button class="tab active" onclick="filterCourses('all')">All Courses</button>
-      <button class="tab" onclick="filterCourses('beginner')">Beginner</button>
-      <button class="tab" onclick="filterCourses('intermediate')">Intermediate</button>
-      <button class="tab" onclick="filterCourses('advanced')">Advanced</button>
-    </div>
-  </section>
-
-  <!-- Courses Grid -->
-  <section class="courses container" id="coursesContainer">
-    <!-- Cards will be injected from JavaScript -->
-  </section>
-
-  <!-- Learning Paths -->
- 
-
-  <section class="learning-paths">
-    <h2>Learning Paths</h2>
-    <p>Structured learning paths to help you achieve specific career goals and master key technologies.</p>
-    <div class="paths container">
-      <div class="path-card">
-        <h3>Frontend Developer</h3>
-        <p>Progress: 40% Complete</p>
-        <ul>
-          <li>HTML & CSS Fundamentals</li>
-          <li>Responsive Web Design</li>
-          <li>JavaScript Essentials</li>
-          <li>React Fundamentals</li>
-          <li>Advanced React Patterns</li>
-        </ul>
-        <button class="view-path">View Path</button>
+  <!-- Mobile Menu -->
+  <div class="mobile-menu" id="mobile-menu">
+    <div class="mobile-menu-container">
+      <div class="mobile-menu-header">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="video-icon">
+          <polygon points="23 7 16 12 23 17 23 7"></polygon>
+          <rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>
+        </svg>
+        <span class="logo-text">YourChannel</span>
+        <button class="close-menu" id="close-menu">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
       </div>
-      <div class="path-card">
-        <h3>Backend Developer</h3>
-        <p>Progress: 30% Complete</p>
-        <ul>
-          <li>Node.js & Express</li>
-          <li>MongoDB</li>
-          <li>GraphQL API</li>
-          <li>Microservices</li>
-        </ul>
-        <button class="view-path">View Path</button>
-      </div>
-      <div class="path-card">
-        <h3>Full-Stack Developer</h3>
-        <p>Progress: 10% Complete</p>
-        <ul>
-          <li>All Frontend + Backend Courses</li>
-          <li>Deployment & DevOps</li>
-        </ul>
-        <button class="view-path">View Path</button>
-      </div>
-    </div>
-  </section>
-
-
-
-
-
-
- <h2 style="text-align: center;">Available Courses</h2>
-
-  <div class="course-grid">
-    <div class="course-card">
-      <div class="course-image"></div>
-      <div class="course-title">HTML & CSS</div>
-    </div>
-
-    <div class="course-card">
-      <div class="course-image"></div>
-      <div class="course-title">JavaScript</div>
-    </div>
-
-    <div class="course-card">
-      <div class="course-image"></div>
-      <div class="course-title">React.js</div>
-    </div>
-
-    <div class="course-card">
-      <div class="course-image"></div>
-      <div class="course-title">Node.js & Express</div>
-    </div>
-
-    <div class="course-card">
-      <div class="course-image"></div>
-      <div class="course-title">MongoDB</div>
-    </div>
-
-    <div class="course-card">
-      <div class="course-image"></div>
-      <div class="course-title">Microservices</div>
+      <nav class="mobile-nav">
+        <a href="index.html" class="mobile-nav-link">Home</a>
+        <a href="about.html" class="mobile-nav-link">About</a>
+        <a href="projects.html" class="mobile-nav-link">Projects</a>
+        <a href="courses.html" class="mobile-nav-link active">Courses</a>
+        <a href="contact.html" class="mobile-nav-link">Contact</a>
+        <a href="https://youtube.com/c/yourchannel" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-full">
+          Subscribe on YouTube
+        </a>
+      </nav>
     </div>
   </div>
 
+  <main>
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="container">
+        <div class="section-header">
+          <h1 class="hero-title">Courses & Learning Paths</h1>
+          <p class="hero-description">
+            Comprehensive courses designed to take you from beginner to professional. Learn at your own pace with
+            project-based curriculum.
+          </p>
+        </div>
+      </div>
+    </section>
 
+    <!-- Search and Filter Section -->
+    <section class="featured-content">
+      <div class="container">
+        <div class="search-container">
+          <div class="search-input-container">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="search-icon">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input type="search" placeholder="Search courses..." class="search-input">
+          </div>
+          <button class="filter-button">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+            </svg>
+            <span class="sr-only">Filter</span>
+          </button>
+        </div>
+        <div class="course-tabs">
+          <button class="course-tab active" data-tab="all">All Courses</button>
+          <button class="course-tab" data-tab="beginner">Beginner</button>
+          <button class="course-tab" data-tab="intermediate">Intermediate</button>
+          <button class="course-tab" data-tab="advanced">Advanced</button>
+        </div>
+        <div class="tab-content active" id="all-tab">
+          <div class="course-grid">
+            <div class="course-card">
+              <div class="course-image">
+                <img src="https://placehold.co/300x200?text=Course+1" alt="HTML & CSS Fundamentals">
+                <div class="course-badge">
+                  <span class="level-badge beginner">Beginner</span>
+                </div>
+              </div>
+              <div class="course-content">
+                <h3 class="course-title">HTML & CSS Fundamentals</h3>
+                <p class="course-description">Learn the building blocks of web development</p>
+                <div class="course-meta">
+                  <div class="meta-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <circle cx="12" cy="12" r="10"></circle>
+                      <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                    <span>10 hours</span>
+                  </div>
+                  <div class="meta-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                      <circle cx="9" cy="7" r="4"></circle>
+                      <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                      <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                    </svg>
+                    <span>10,000+</span>
+                  </div>
+                  <div class="meta-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="star-icon">
+                      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                    </svg>
+                    <span>4.8</span>
+                  </div>
+                </div>
+                <a href="courses/course-1.html" class="btn btn-primary btn-full">View Course</a>
+              </div>
+            </div>
+            <div class="course-card">
+              <div class="course-image">
+                <img src="https://placehold.co/300x200?text=Course+2" alt="JavaScript Essentials">
+                <div class="course-badge">
+                  <span class="level-badge beginner">Beginner</span>
+                </div>
+              </div>
+              <div class="course-content">
+                <h3 class="course-title">JavaScript Essentials</h3>
+                <p class="course-description">Master the core concepts of JavaScript programming</p>
+                <div class="course-meta">
+                  <div class="meta-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <circle cx="12" cy="12" r="10"></circle>
+                      <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                    <span>15 hours</span>
+                  </div>
+                  <div class="meta-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                      <circle cx="9" cy="7" r="4"></circle>
+                      <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                      <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                    </svg>
+                    <span>8,500+</span>
+                  </div>
+                  <div class="meta-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="star-icon">
+                      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                    </svg>
+                    <span>4.7</span>
+                  </div>
+                </div>
+                <a href="courses/course-2.html" class="btn btn-primary btn-full">View Course</a>
+              </div>
+            </div>
+            <div class="course-card">
+              <div class="course-image">
+                <img src="https://placehold.co/300x200?text=Course+3" alt="Responsive Web Design">
+                <div class="course-badge">
+                  <span class="level-badge beginner">Beginner</span>
+                </div>
+              </div>
+              <div class="course-content">
+                <h3 class="course-title">Responsive Web Design</h3>
+                <p class="course-description">Create websites that work on any device</p>
+                <div class="course-meta">
+                  <div class="meta-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <circle cx="12" cy="12" r="10"></circle>
+                      <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                    <span>8 hours</span>
+                  </div>
+                  <div class="meta-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                      <circle cx="9" cy="7" r="4"></circle>
+                      <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                      <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                    </svg>
+                    <span>7,200+</span>
+                  </div>
+                  <div class="meta-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="star-icon">
+                      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                    </svg>
+                    <span>4.9</span>
+                  </div>
+                </div>
+                <a href="courses/course-3.html" class="btn btn-primary btn-full">View Course</a>
+              </div>
+            </div>
+            <div class="course-card">
+              <div class="course-image">
+                <img src="https://placehold.co/300x200?text=Course+4" alt="React Fundamentals">
+                <div class="course-badge">
+                  <span class="level-badge intermediate">Intermediate</span>
+                </div>
+              </div>
+              <div class="course-content">
+                <h3 class="course-title">React Fundamentals</h3>
+                <p class="course-description">Build interactive UIs with React</p>
+                <div class="course-meta">
+                  <div class="meta-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <circle cx="12" cy="12" r="10"></circle>
+                      <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                    <span>20 hours</span>
+                  </div>
+                  <div class="meta-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                      <circle cx="9" cy="7" r="4"></circle>
+                      <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                      <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                    </svg>
+                    <span>6,800+</span>
+                  </div>
+                  <div class="meta-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="star-icon">
+                      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                    </svg>
+                    <span>4.8</span>
+                  </div>
+                </div>
+                <a href="courses/course-4.html" class="btn btn-primary btn-full">View Course</a>
+              </div>
+            </div>
+            <div class="course-card">
+              <div class="course-image">
+                <img src="https://placehold.co/300x200?text=Course+5" alt="Node.js & Express">
+                <div class="course-badge">
+                  <span class="level-badge intermediate">Intermediate</span>
+                </div>
+              </div>
+              <div class="course-content">
+                <h3 class="course-title">Node.js & Express</h3>
+                <p class="course-description">Create server-side applications with Node.js</p>
+                <div class="course-meta">
+                  <div class="meta-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <circle cx="12" cy="12" r="10"></circle>
+                      <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                    <span>18 hours</span>
+                  </div>
+                  <div class="meta-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                      <circle cx="9" cy="7" r="4"></circle>
+                      <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                      <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                    </svg>
+                    <span>5,500+</span>
+                  </div>
+                  <div class="meta-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="star-icon">
+                      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                    </svg>
+                    <span>4.6</span>
+                  </div>
+                </div>
+                <a href="courses/course-5.html" class="btn btn-primary btn-full">View Course</a>
+              </div>
+            </div>
+            <div class="course-card">
+              <div class="course-image">
+                <img src="https://placehold.co/300x200?text=Course+6" alt="MongoDB for Developers">
+                <div class="course-badge">
+                  <span class="level-badge intermediate">Intermediate</span>
+                </div>
+              </div>
+              <div class="course-content">
+                <h3 class="course-title">MongoDB for Developers</h3>
+                <p class="course-description">Learn NoSQL database design and implementation</p>
+                <div class="course-meta">
+                  <div class="meta-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <circle cx="12" cy="12" r="10"></circle>
+                      <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                    <span>12 hours</span>
+                  </div>
+                  <div class="meta-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                      <circle cx="9" cy="7" r="4"></circle>
+                      <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                      <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                    </svg>
+                    <span>4,200+</span>
+                  </div>
+                  <div class="meta-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="star-icon">
+                      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                    </svg>
+                    <span>4.7</span>
+                  </div>
+                </div>
+                <a href="courses/course-6.html" class="btn btn-primary btn-full">View Course</a>
+              </div>
+            </div>
+            <div class="course-card">
+              <div class="course-image">
+                <img src="https://placehold.co/300x200?text=Course+7" alt="Advanced React Patterns">
+                <div class="course-badge">
+                  <span class="level-badge advanced">Advanced</span>
+                </div>
+              </div>
+              <div class="course-content">
+                <h3 class="course-title">Advanced React Patterns</h3>
+                <p class="course-description">Master advanced React concepts and patterns</p>
+                <div class="course-meta">
+                  <div class="meta-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <circle cx="12" cy="12" r="10"></circle>
+                      <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                    <span>15 hours</span>
+                  </div>
+                  <div class="meta-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                      <circle cx="9" cy="7" r="4"></circle>
+                      <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                      <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                    </svg>
+                    <span>3,800+</span>
+                  </div>
+                  <div class="meta-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="star-icon">
+                      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                    </svg>
+                    <span>4.9</span>
+                  </div>
+                </div>
+                <a href="courses/course-7.html" class="btn btn-primary btn-full">View Course</a>
+              </div>
+            </div>
+            <div class="course-card">
+              <div class="course-image">
+                <img src="https://placehold.co/300x200?text=Course+8" alt="GraphQL API Development">
+                <div class="course-badge">
+                  <span class="level-badge advanced">Advanced</span>
+                </div>
+              </div>
+              <div class="course-content">
+                <h3 class="course-title">GraphQL API Development</h3>
+                <p class="course-description">Build efficient APIs with GraphQL</p>
+                <div class="course-meta">
+                  <div class="meta-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <circle cx="12" cy="12" r="10"></circle>
+                      <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                    <span>14 hours</span>
+                  </div>
+                  <div class="meta-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                      <circle cx="9" cy="7" r="4"></circle>
+                      <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                      <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                    </svg>
+                    <span>3,200+</span>
+                  </div>
+                  <div class="meta-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="star-icon">
+                      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                    </svg>
+                    <span>4.8</span>
+                  </div>
+                </div>
+                <a href="courses/course-8.html" class="btn btn-primary btn-full">View Course</a>
+              </div>
+            </div>
+            <div class="course-card">
+              <div class="course-image">
+                <img src="https://placehold.co/300x200?text=Course+9" alt="Microservices Architecture">
+                <div class="course-badge">
+                  <span class="level-badge advanced">Advanced</span>
+                </div>
+              </div>
+              <div class="course-content">
+                <h3 class="course-title">Microservices Architecture</h3>
+                <p class="course-description">Design and implement scalable microservices</p>
+                <div class="course-meta">
+                  <div class="meta-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <circle cx="12" cy="12" r="10"></circle>
+                      <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                    <span>22 hours</span>
+                  </div>
+                  <div class="meta-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                      <circle cx="9" cy="7" r="4"></circle>
+                      <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                      <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                    </svg>
+                    <span>2,500+</span>
+                  </div>
+                  <div class="meta-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="star-icon">
+                      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                    </svg>
+                    <span>4.7</span>
+                  </div>
+                </div>
+                <a href="courses/course-9.html" class="btn btn-primary btn-full">View Course</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="tab-content" id="beginner-tab">
+          <!-- Beginner courses would be here -->
+        </div>
+        <div class="tab-content" id="intermediate-tab">
+          <!-- Intermediate courses would be here -->
+        </div>
+        <div class="tab-content" id="advanced-tab">
+          <!-- Advanced courses would be here -->
+        </div>
+      </div>
+    </section>
 
-<div class="footer-bottom">
-  <footer>
-    <p>© 2025 YourChannel. All rights reserved.</p>
+    <!-- Learning Paths Section -->
+    <section class="content-tabs">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">Learning Paths</h2>
+          <p class="section-description">
+            Structured learning paths to help you achieve specific career goals and master key technologies.
+          </p>
+        </div>
+        <div class="learning-paths-grid">
+          <div class="path-card">
+            <h3 class="path-title">Frontend Developer</h3>
+            <p class="path-description">Master modern frontend development</p>
+            <div class="progress-container">
+              <div class="progress-header">
+                <span>Progress</span>
+                <span>4/6 Courses</span>
+              </div>
+              <div class="progress-bar">
+                <div class="progress-value" style="width: 66%;"></div>
+              </div>
+            </div>
+            <div class="course-list">
+              <h4 class="course-list-title">Included Courses:</h4>
+              <ul class="course-list-items">
+                <li>HTML & CSS Fundamentals</li>
+                <li>JavaScript Essentials</li>
+                <li>React Fundamentals</li>
+                <li>Advanced React Patterns</li>
+                <li>Next.js for Production</li>
+                <li>UI/UX for Developers</li>
+              </ul>
+            </div>
+            <div style="margin-top: 1rem;">
+              <a href="courses/paths/frontend.html" class="btn btn-primary btn-full">View Path</a>
+            </div>
+          </div>
+          <div class="path-card">
+            <h3 class="path-title">Backend Developer</h3>
+            <p class="path-description">Build scalable backend systems</p>
+            <div class="progress-container">
+              <div class="progress-header">
+                <span>Progress</span>
+                <span>2/6 Courses</span>
+              </div>
+              <div class="progress-bar">
+                <div class="progress-value" style="width: 33%;"></div>
+              </div>
+            </div>
+            <div class="course-list">
+              <h4 class="course-list-title">Included Courses:</h4>
+              <ul class="course-list-items">
+                <li>Node.js Fundamentals</li>
+                <li>RESTful API Design</li>
+                <li>Database Design & SQL</li>
+                <li>NoSQL with MongoDB</li>
+                <li>Authentication & Authorization</li>
+                <li>Microservices Architecture</li>
+              </ul>
+            </div>
+            <div style="margin-top: 1rem;">
+              <a href="courses/paths/backend.html" class="btn btn-primary btn-full">View Path</a>
+            </div>
+          </div>
+          <div class="path-card">
+            <h3 class="path-title">Full-Stack Developer</h3>
+            <p class="path-description">Become a complete developer</p>
+            <div class="progress-container">
+              <div class="progress-header">
+                <span>Progress</span>
+                <span>1/8 Courses</span>
+              </div>
+              <div class="progress-bar">
+                <div class="progress-value" style="width: 12%;"></div>
+              </div>
+            </div>
+            <div class="course-list">
+              <h4 class="course-list-title">Included Courses:</h4>
+              <ul class="course-list-items">
+                <li>Web Development Fundamentals</li>
+                <li>JavaScript Deep Dive</li>
+                <li>React Ecosystem</li>
+                <li>Node.js & Express</li>
+                <li>Database Management</li>
+                <li>Authentication & Security</li>
+                <li>Deployment & DevOps</li>
+                <li>Full-Stack Projects</li>
+              </ul>
+            </div>
+            <div style="margin-top: 1rem;">
+              <a href="courses/paths/fullstack.html" class="btn btn-primary btn-full">View Path</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Featured Course Section -->
+    <section class="featured-content">
+      <div class="container">
+        <div class="section-header">
+          <span class="featured-badge">New Course</span>
+          <h2 class="section-title">Full-Stack Web Development Bootcamp</h2>
+          <p class="section-description">
+            A comprehensive course covering everything you need to become a professional full-stack developer.
+          </p>
+        </div>
+        <div class="featured-course">
+          <div class="featured-course-image">
+            <img src="https://placehold.co/600x400" alt="Featured Course">
+            <div class="play-overlay">
+              <button class="play-button">
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="play-icon">
+                  <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                </svg>
+              </button>
+            </div>
+          </div>
+          <div class="featured-course-content">
+            <div class="rating">
+              <div class="stars">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="star-icon">
+                  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                </svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="star-icon">
+                  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                </svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="star-icon">
+                  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                </svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="star-icon">
+                  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                </svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="star-icon">
+                  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                </svg>
+              </div>
+              <span style="font-size: 0.875rem; font-weight: 500; margin-left: 0.5rem;">5.0 (120 reviews)</span>
+            </div>
+            <h3 class="featured-title">What You'll Learn</h3>
+            <div class="check-list">
+              <div class="check-item">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="check-icon">
+                  <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                  <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                </svg>
+                <span>HTML, CSS & JavaScript</span>
+              </div>
+              <div class="check-item">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="check-icon">
+                  <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                  <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                </svg>
+                <span>React & Next.js</span>
+              </div>
+              <div class="check-item">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="check-icon">
+                  <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                  <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                </svg>
+                <span>Node.js & Express</span>
+              </div>
+              <div class="check-item">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="check-icon">
+                  <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                  <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                </svg>
+                <span>MongoDB & PostgreSQL</span>
+              </div>
+              <div class="check-item">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="check-icon">
+                  <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                  <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                </svg>
+                <span>Authentication & Security</span>
+              </div>
+              <div class="check-item">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="check-icon">
+                  <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                  <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                </svg>
+                <span>Deployment & DevOps</span>
+              </div>
+            </div>
+            <div style="display: flex; gap: 1rem; font-size: 0.875rem; margin-top: 1rem;">
+              <div class="meta-item">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+                <span>40+ Hours</span>
+              </div>
+              <div class="meta-item">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="9" cy="7" r="4"></circle>
+                  <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                  <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                </svg>
+                <span>5,000+ Students</span>
+              </div>
+            </div>
+            <div class="featured-project-actions" style="margin-top: 1rem;">
+              <a href="courses/full-stack-bootcamp.html" class="btn btn-primary">
+                Enroll Now
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ml-2">
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                  <polyline points="12 5 19 12 12 19"></polyline>
+                </svg>
+              </a>
+              <a href="courses/full-stack-bootcamp/preview.html" class="btn btn-outline">Watch Preview</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-about">
+          <a href="index.html" class="logo">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="video-icon">
+              <polygon points="23 7 16 12 23 17 23 7"></polygon>
+              <rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>
+            </svg>
+            <span class="logo-text">YourChannel</span>
+          </a>
+          <p class="footer-description">
+            Helping developers level up their skills through practical, project-based learning.
+          </p>
+          <div class="social-links">
+            <a href="https://youtube.com/c/yourchannel" target="_blank" rel="noopener noreferrer" class="social-link">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="youtube-icon">
+                <path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"></path>
+                <polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon>
+              </svg>
+            </a>
+            <a href="https://twitter.com/yourhandle" target="_blank" rel="noopener noreferrer" class="social-link">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="twitter-icon">
+                <path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path>
+              </svg>
+            </a>
+            <a href="https://github.com/yourusername" target="_blank" rel="noopener noreferrer" class="social-link">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="github-icon">
+                <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
+              </svg>
+            </a>
+            <a href="https://linkedin.com/in/yourprofile" target="_blank" rel="noopener noreferrer" class="social-link">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="linkedin-icon">
+                <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+                <rect x="2" y="9" width="4" height="12"></rect>
+                <circle cx="4" cy="4" r="2"></circle>
+              </svg>
+            </a>
+          </div>
+        </div>
+        <div class="footer-links">
+          <h3 class="footer-heading">Pages</h3>
+          <ul class="footer-menu">
+            <li><a href="index.html" class="footer-link">Home</a></li>
+            <li><a href="about.html" class="footer-link">About</a></li>
+            <li><a href="projects.html" class="footer-link">Projects</a></li>
+            <li><a href="courses.html" class="footer-link">Courses</a></li>
+            <li><a href="contact.html" class="footer-link">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer-links">
+          <h3 class="footer-heading">Resources</h3>
+          <ul class="footer-menu">
+            <li><a href="#" class="footer-link">Blog</a></li>
+            <li><a href="#" class="footer-link">Free Tutorials</a></li>
+            <li><a href="#" class="footer-link">Learning Paths</a></li>
+            <li><a href="#" class="footer-link">Code Snippets</a></li>
+            <li><a href="#" class="footer-link">Community</a></li>
+          </ul>
+        </div>
+        <div class="footer-links">
+          <h3 class="footer-heading">Contact</h3>
+          <ul class="footer-menu">
+            <li>
+              <a href="mailto:hello@yourchannel.com" class="footer-link contact-link">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                  <polyline points="22,6 12,13 2,6"></polyline>
+                </svg>
+                <span>hello@yourchannel.com</span>
+              </a>
+            </li>
+            <li>
+              <a href="https://youtube.com/c/yourchannel" target="_blank" rel="noopener noreferrer" class="footer-link contact-link">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"></path>
+                  <polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon>
+                </svg>
+                <span>YouTube Channel</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p class="copyright">© <span id="current-year"></span> YourChannel. All rights reserved.</p>
+        <div class="footer-legal">
+          <a href="#" class="legal-link">Privacy Policy</a>
+          <a href="#" class="legal-link">Terms of Service</a>
+          <a href="#" class="legal-link">Cookie Policy</a>
+        </div>
+      </div>
+    </div>
   </footer>
-</div>
 
-<footer class="footer">
-  <div class="footer-container">
-    <div class="footer-section about">
-      <h2><span class="logo-icon">🎥</span> YourChannel</h2>
-      <p>Helping developers level up their skills through practical, project-based learning.</p>
-      <div class="social-icons">
-        <a href="#"><i class="fab fa-youtube"></i></a>
-        <a href="#"><i class="fab fa-twitter"></i></a>
-        <a href="#"><i class="fab fa-github"></i></a>
-        <a href="#"><i class="fab fa-linkedin"></i></a>
-      </div>
-    </div>
-
-    <div class="footer-section">
-      <h3>Pages</h3>
-      <ul>
-        <li><a href="#">Home</a></li>
-        <li><a href="#">About</a></li>
-        <li><a href="#">Projects</a></li>
-        <li><a href="#">Courses</a></li>
-        <li><a href="#">Contact</a></li>
-      </ul>
-    </div>
-
-    <div class="footer-section">
-      <h3>Resources</h3>
-      <ul>
-        <li><a href="#">Blog</a></li>
-        <li><a href="#">Free Tutorials</a></li>
-        <li><a href="#">Learning Paths</a></li>
-        <li><a href="#">Code Snippets</a></li>
-        <li><a href="#">Community</a></li>
-      </ul>
-    </div>
-
-    <div class="footer-section">
-      <h3>Contact</h3>
-      <ul>
-        <li><i class="far fa-envelope"></i> mohshinmansuri123@gmail.com</li>
-        <li><i class="fab fa-youtube"></i> YouTube Channel</li>
-      </ul>
-    </div>
-  </div>
-
-  <div class="footer-bottom">
-    <p>© 2025 YourChannel. All rights reserved.</p>
-    <div class="footer-links">
-      <a href="#">Privacy Policy</a>
-      <a href="#">Terms of Service</a>
-      <a href="#">Cookie Policy</a>
-    </div>
-  </div>
-</footer>
-
-
-  <!-- <script>
-    const courses = [
-  {
-    title: "HTML & CSS Fundamentals",
-    level: "beginner",
-    duration: "6h 30m",
-    learners: "3,200+",
-    rating: "4.6",
-    image: "images/html-css.jpg"
-  },
-  {
-    title: "JavaScript Essentials",
-    level: "beginner",
-    duration: "8h 10m",
-    learners: "5,500+",
-    rating: "4.8",
-    image: "images/javascript.jpg"
-  },
-  {
-    title: "React Fundamentals",
-    level: "intermediate",
-    duration: "10h",
-    learners: "4,800+",
-    rating: "4.6",
-    image: "images/react.jpg"
-  },
-  {
-    title: "Node.js & Express",
-    level: "intermediate",
-    duration: "10h",
-    learners: "5,000+",
-    rating: "4.5",
-    image: "images/node.jpg"
-  },
-  {
-    title: "Advanced React Patterns",
-    level: "advanced",
-    duration: "15h",
-    learners: "3,000+",
-    rating: "4.7",
-    image: "images/advanced-react.jpg"
-  }
-];
-
-const coursesContainer = document.getElementById("coursesContainer");
-
-function renderCourses(filter = "all") {
-  coursesContainer.innerHTML = "";
-  const filtered = filter === "all" ? courses : courses.filter(c => c.level === filter);
-  filtered.forEach(course => {
-    const card = document.createElement("div");
-    card.className = "course-card";
-    card.innerHTML = `
-      <img src="${course.image}" alt="${course.title}" />
-      <span class="label">${course.level.charAt(0).toUpperCase() + course.level.slice(1)}</span>
-      <h3>${course.title}</h3>
-      <div class="meta">
-        <span>${course.duration}</span>
-        <span>${course.learners}</span>
-        <span>⭐ ${course.rating}</span>
-      </div>
-      <a href="#" class="btn">View Course</a>
-    `;
-    coursesContainer.appendChild(card);
-  });
-}
-
-function filterCourses(level) {
-  document.querySelectorAll('.tab').forEach(btn => btn.classList.remove('active'));
-  document.querySelector(`.tab[onclick="filterCourses('${level}')"]`).classList.add('active');
-  renderCourses(level);
-}
-
-// Initial render
-renderCourses();
-
-  </script> --> 
+  <script src="script.js"></script>
 </body>
 </html>
-
