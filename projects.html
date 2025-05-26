@@ -5,7 +5,430 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Projects - Your YouTube Channel</title>
   <link rel="stylesheet" href="styles.css">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans&family=Segoe+UI&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+
+  <style>
+    /* Additional styles specific to courses page */
+    .search-container {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .search-input-container {
+      position: relative;
+      flex: 1;
+    }
+    
+    .search-icon {
+      position: absolute;
+      left: 0.625rem;
+      top: 0.625rem;
+      color: var(--muted-foreground);
+    }
+    
+    .search-input {
+      width: 100%;
+      padding: 0.5rem 0.5rem 0.5rem 2rem;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      background-color: rgb(89, 89, 100);
+      font-size: 0.875rem;
+    }
+    
+    .search-input:focus {
+      outline: none;
+      border-color: var(--ring);
+      box-shadow: 0 0 0 2px rgba(148, 163, 184, 0.2);
+    }
+    
+    .filter-button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 2.5rem;
+      height: 2.5rem;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      background-color: var(--background);
+    }
+    
+    .filter-button:hover {
+      background-color: var(--accent);
+    }
+    
+    .course-tabs {
+      display: flex;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 1.5rem;
+      overflow-x: auto;
+    }
+    
+    .course-tab {
+      padding: 0.5rem 1rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--muted-foreground);
+      border-bottom: 2px solid transparent;
+      background: none;
+      border-top: none;
+      border-left: none;
+      border-right: none;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    
+    .course-tab.active {
+      color: var(--foreground);
+      border-bottom-color: var(--primary);
+    }
+    
+    .course-grid {
+      display: grid;
+      gap: 1.5rem;
+    }
+    
+    @media (min-width: 640px) {
+      .course-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    
+    @media (min-width: 1024px) {
+      .course-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+    
+    .course-card {
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      overflow: hidden;
+    }
+    
+    .course-image {
+      position: relative;
+      aspect-ratio: 16 / 9;
+    }
+    
+    .course-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .course-badge {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 1rem;
+      background: linear-gradient(to top, rgba(0, 0, 0, 0.6), transparent);
+    }
+    
+    .level-badge {
+      font-size: 0.75rem;
+      padding: 0.25rem 0.5rem;
+      border-radius: var(--radius);
+      color: white;
+    }
+    
+    .beginner {
+      background-color: #16a34a;
+    }
+    
+    .intermediate {
+      background-color: #ca8a04;
+    }
+    
+    .advanced {
+      background-color: #dc2626;
+    }
+    
+    .course-content {
+      padding: 1.5rem;
+    }
+    
+    .course-title {
+      font-size: 1.125rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+    
+    .course-description {
+      font-size: 0.875rem;
+      color: var(--muted-foreground);
+      margin-bottom: 1rem;
+    }
+    
+    .course-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.875rem;
+      margin-bottom: 1rem;
+    }
+    
+    .meta-item {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+    
+    .star-icon {
+      color: #f59e0b;
+      fill: #f59e0b;
+    }
+    
+    .learning-paths-grid {
+      display: grid;
+      gap: 1.5rem;
+    }
+    
+    @media (min-width: 768px) {
+      .learning-paths-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    
+    @media (min-width: 1024px) {
+      .learning-paths-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+    
+    .path-card {
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      padding: 1.5rem;
+    }
+    
+    .path-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+    }
+    
+    .path-description {
+      font-size: 0.875rem;
+      color: var(--muted-foreground);
+      margin-bottom: 1rem;
+    }
+    
+    .progress-container {
+      margin-bottom: 1rem;
+    }
+    
+    .progress-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.875rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .progress-bar {
+      height: 0.5rem;
+      background-color: var(--muted);
+      border-radius: 9999px;
+      overflow: hidden;
+    }
+    
+    .progress-value {
+      height: 100%;
+      background-color: var(--primary);
+    }
+    
+    .course-list {
+      margin-top: 1rem;
+    }
+    
+    .course-list-title {
+      font-size: 0.875rem;
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+    }
+    
+    .course-list-items {
+      list-style: none;
+      font-size: 0.875rem;
+      color: var(--muted-foreground);
+    }
+    
+    .course-list-items li {
+      margin-bottom: 0.25rem;
+    }
+    
+    .featured-course {
+      display: grid;
+      gap: 1.5rem;
+    }
+    
+    @media (min-width: 1024px) {
+      .featured-course {
+        grid-template-columns: 1fr 1fr;
+        align-items: center;
+      }
+    }
+    
+    .featured-course-image {
+      position: relative;
+      aspect-ratio: 16 / 9;
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    
+    .featured-course-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .play-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .play-button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 4rem;
+      height: 4rem;
+      border-radius: 9999px;
+      background-color: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(4px);
+      border: none;
+      cursor: pointer;
+    }
+    
+    .featured-course-content {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    
+    .rating {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .stars {
+      display: flex;
+    }
+    
+    .check-list {
+      display: grid;
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+    }
+    
+    @media (min-width: 640px) {
+      .check-list {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    
+    .check-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.875rem;
+      color: var(--muted-foreground);
+    }
+    
+    .check-icon {
+      color: #22c55e;
+    }
+
+    @media (max-width: 768px) {
+  .footer-links {
+    width: 100%;
+    margin-bottom: 0.1rem;
+  }
+
+  .social-links {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}
+
+.footer-bottom{
+  padding-bottom: 0.1rem;
+}
+
+/* Basic Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.hero {
+  background: linear-gradient(135deg, #420f58, #ffe4ec);
+  padding: 100px 20px;
+  text-align: center;
+  color: #333;
+  position: relative;
+}
+
+.hero::before {
+  content: "";
+  background: url('https://www.transparenttextures.com/patterns/stardust.png');
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  opacity: 0.1;
+  z-index: 0;
+}
+
+.container {
+  position: relative;
+  max-width: 960px;
+  margin: 0 auto;
+  z-index: 1;
+}
+
+.section-header {
+  padding: 20px;
+}
+
+.hero-title {
+  font-size: 3rem;
+  font-weight: 700;
+  color: #711836;
+  margin-bottom: 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.hero-description {
+  font-size: 1.2rem;
+  line-height: 1.8;
+  color: #555;
+  max-width: 700px;
+  margin: 0 auto;
+  font-family: 'Open Sans', sans-serif;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: 2.2rem;
+  }
+
+  .hero-description {
+    font-size: 1rem;
+  }
+}
+
+    
+  </style>
 </head>
 <body>
   <!-- Header -->
@@ -17,13 +440,13 @@
             <polygon points="23 7 16 12 23 17 23 7"></polygon>
             <rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>
           </svg>
-          <span class="logo-text">YourChannel</span>
+          <span class="logo-text">Moh Technology</span>
         </a>
         <nav class="main-nav">
           <a href="index.html" class="nav-link">Home</a>
           <a href="about.html" class="nav-link">About</a>
-          <a href="projects.html" class="nav-link active">Projects</a>
-          <a href="courses.html" class="nav-link">Courses</a>
+          <a href="projects.html" class="nav-link">Projects</a>
+          <a href="courses.html" class="nav-link active">Courses</a>
           <a href="contact.html" class="nav-link">Contact</a>
         </nav>
         <div class="header-actions">
@@ -62,8 +485,8 @@
       <nav class="mobile-nav">
         <a href="index.html" class="mobile-nav-link">Home</a>
         <a href="about.html" class="mobile-nav-link">About</a>
-        <a href="projects.html" class="mobile-nav-link active">Projects</a>
-        <a href="courses.html" class="mobile-nav-link">Courses</a>
+        <a href="projects.html" class="mobile-nav-link">Projects</a>
+        <a href="courses.html" class="mobile-nav-link active">Courses</a>
         <a href="contact.html" class="mobile-nav-link">Contact</a>
         <a href="https://youtube.com/c/yourchannel" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-full">
           Subscribe on YouTube
@@ -74,523 +497,251 @@
 
   <main>
     <!-- Hero Section -->
-    <section class="hero projects-hero">
-      <div class="container">
-        <div class="section-header text-center">
-          <h1 class="hero-title">Projects & Tutorials</h1>
-          <p class="hero-description">
-            Browse through my collection of hands-on projects and step-by-step tutorials to enhance your coding
-            skills.
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <!-- Search and Filter Section -->
-    <section class="search-section">
-      <div class="container">
-        <div class="search-container">
-          <div class="search-box">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="search-icon">
-              <circle cx="11" cy="11" r="8"></circle>
-              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-            </svg>
-            <input type="search" placeholder="Search projects..." class="search-input">
-          </div>
-          <button class="btn btn-outline btn-icon filter-button">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
-            </svg>
-            <span class="sr-only">Filter</span>
-          </button>
-        </div>
-        <div class="project-tabs">
-          <button class="project-tab active" data-tab="all">All Projects</button>
-          <button class="project-tab" data-tab="frontend">Frontend</button>
-          <button class="project-tab" data-tab="backend">Backend</button>
-          <button class="project-tab" data-tab="fullstack">Full-Stack</button>
-        </div>
-        <div class="project-content active" id="all-tab">
-          <div class="project-grid">
-            <!-- Project Cards (9 cards) -->
-            <div class="project-card">
-              <div class="card-image">
-                <img src="https://placehold.co/300x200?text=Project+1" alt="Portfolio Website">
-              </div>
-              <div class="card-header">
-                <div class="card-title-container">
-                  <h3 class="card-title">Portfolio Website</h3>
-                  <span class="project-badge">Frontend</span>
-                </div>
-                <p class="card-description">A responsive portfolio website built with React and Tailwind CSS</p>
-              </div>
-              <div class="card-content">
-                <div class="tag-container">
-                  <span class="tag">React</span>
-                  <span class="tag">Tailwind CSS</span>
-                  <span class="tag">Framer Motion</span>
-                </div>
-              </div>
-              <div class="card-footer">
-                <a href="projects/project-1.html" class="btn btn-outline btn-sm">View Project</a>
-                <a href="https://github.com/yourusername/project-1" target="_blank" rel="noopener noreferrer" class="btn btn-ghost btn-sm">View Code</a>
-              </div>
-            </div>
-            <div class="project-card">
-              <div class="card-image">
-                <img src="https://placehold.co/300x200?text=Project+2" alt="Task Management App">
-              </div>
-              <div class="card-header">
-                <div class="card-title-container">
-                  <h3 class="card-title">Task Management App</h3>
-                  <span class="project-badge">Frontend</span>
-                </div>
-                <p class="card-description">A drag-and-drop task management application with user authentication</p>
-              </div>
-              <div class="card-content">
-                <div class="tag-container">
-                  <span class="tag">React</span>
-                  <span class="tag">Firebase</span>
-                  <span class="tag">DnD Kit</span>
-                </div>
-              </div>
-              <div class="card-footer">
-                <a href="projects/project-2.html" class="btn btn-outline btn-sm">View Project</a>
-                <a href="https://github.com/yourusername/project-2" target="_blank" rel="noopener noreferrer" class="btn btn-ghost btn-sm">View Code</a>
-              </div>
-            </div>
-            <div class="project-card">
-              <div class="card-image">
-                <img src="https://placehold.co/300x200?text=Project+3" alt="E-commerce UI">
-              </div>
-              <div class="card-header">
-                <div class="card-title-container">
-                  <h3 class="card-title">E-commerce UI</h3>
-                  <span class="project-badge">Frontend</span>
-                </div>
-                <p class="card-description">A modern e-commerce user interface with product filtering and cart functionality</p>
-              </div>
-              <div class="card-content">
-                <div class="tag-container">
-                  <span class="tag">Next.js</span>
-                  <span class="tag">Tailwind CSS</span>
-                  <span class="tag">TypeScript</span>
-                </div>
-              </div>
-              <div class="card-footer">
-                <a href="projects/project-3.html" class="btn btn-outline btn-sm">View Project</a>
-                <a href="https://github.com/yourusername/project-3" target="_blank" rel="noopener noreferrer" class="btn btn-ghost btn-sm">View Code</a>
-              </div>
-            </div>
-            <div class="project-card">
-              <div class="card-image">
-                <img src="https://placehold.co/300x200?text=Project+4" alt="REST API">
-              </div>
-              <div class="card-header">
-                <div class="card-title-container">
-                  <h3 class="card-title">REST API</h3>
-                  <span class="project-badge">Backend</span>
-                </div>
-                <p class="card-description">A RESTful API for a blog platform with authentication and authorization</p>
-              </div>
-              <div class="card-content">
-                <div class="tag-container">
-                  <span class="tag">Node.js</span>
-                  <span class="tag">Express</span>
-                  <span class="tag">MongoDB</span>
-                </div>
-              </div>
-              <div class="card-footer">
-                <a href="projects/project-4.html" class="btn btn-outline btn-sm">View Project</a>
-                <a href="https://github.com/yourusername/project-4" target="_blank" rel="noopener noreferrer" class="btn btn-ghost btn-sm">View Code</a>
-              </div>
-            </div>
-            <div class="project-card">
-              <div class="card-image">
-                <img src="https://placehold.co/300x200?text=Project+5" alt="Real-time Chat Backend">
-              </div>
-              <div class="card-header">
-                <div class="card-title-container">
-                  <h3 class="card-title">Real-time Chat Backend</h3>
-                  <span class="project-badge">Backend</span>
-                </div>
-                <p class="card-description">A scalable backend for a real-time chat application</p>
-              </div>
-              <div class="card-content">
-                <div class="tag-container">
-                  <span class="tag">Node.js</span>
-                  <span class="tag">Socket.io</span>
-                  <span class="tag">Redis</span>
-                </div>
-              </div>
-              <div class="card-footer">
-                <a href="projects/project-5.html" class="btn btn-outline btn-sm">View Project</a>
-                <a href="https://github.com/yourusername/project-5" target="_blank" rel="noopener noreferrer" class="btn btn-ghost btn-sm">View Code</a>
-              </div>
-            </div>
-            <div class="project-card">
-              <div class="card-image">
-                <img src="https://placehold.co/300x200?text=Project+6" alt="GraphQL API">
-              </div>
-              <div class="card-header">
-                <div class="card-title-container">
-                  <h3 class="card-title">GraphQL API</h3>
-                  <span class="project-badge">Backend</span>
-                </div>
-                <p class="card-description">A GraphQL API for a social media platform with data relationships</p>
-              </div>
-              <div class="card-content">
-                <div class="tag-container">
-                  <span class="tag">Node.js</span>
-                  <span class="tag">Apollo</span>
-                  <span class="tag">PostgreSQL</span>
-                </div>
-              </div>
-              <div class="card-footer">
-                <a href="projects/project-6.html" class="btn btn-outline btn-sm">View Project</a>
-                <a href="https://github.com/yourusername/project-6" target="_blank" rel="noopener noreferrer" class="btn btn-ghost btn-sm">View Code</a>
-              </div>
-            </div>
-            <div class="project-card">
-              <div class="card-image">
-                <img src="https://placehold.co/300x200?text=Project+7" alt="Social Media App">
-              </div>
-              <div class="card-header">
-                <div class="card-title-container">
-                  <h3 class="card-title">Social Media App</h3>
-                  <span class="project-badge">Full-Stack</span>
-                </div>
-                <p class="card-description">A full-stack social media application with posts, comments, and likes</p>
-              </div>
-              <div class="card-content">
-                <div class="tag-container">
-                  <span class="tag">React</span>
-                  <span class="tag">Node.js</span>
-                  <span class="tag">MongoDB</span>
-                </div>
-              </div>
-              <div class="card-footer">
-                <a href="projects/project-7.html" class="btn btn-outline btn-sm">View Project</a>
-                <a href="https://github.com/yourusername/project-7" target="_blank" rel="noopener noreferrer" class="btn btn-ghost btn-sm">View Code</a>
-              </div>
-            </div>
-            <div class="project-card">
-              <div class="card-image">
-                <img src="https://placehold.co/300x200?text=Project+8" alt="Job Board">
-              </div>
-              <div class="card-header">
-                <div class="card-title-container">
-                  <h3 class="card-title">Job Board</h3>
-                  <span class="project-badge">Full-Stack</span>
-                </div>
-                <p class="card-description">A job board platform where companies can post jobs and users can apply</p>
-              </div>
-              <div class="card-content">
-                <div class="tag-container">
-                  <span class="tag">Next.js</span>
-                  <span class="tag">Node.js</span>
-                  <span class="tag">PostgreSQL</span>
-                </div>
-              </div>
-              <div class="card-footer">
-                <a href="projects/project-8.html" class="btn btn-outline btn-sm">View Project</a>
-                <a href="https://github.com/yourusername/project-8" target="_blank" rel="noopener noreferrer" class="btn btn-ghost btn-sm">View Code</a>
-              </div>
-            </div>
-            <div class="project-card">
-              <div class="card-image">
-                <img src="https://placehold.co/300x200?text=Project+9" alt="Video Streaming Platform">
-              </div>
-              <div class="card-header">
-                <div class="card-title-container">
-                  <h3 class="card-title">Video Streaming Platform</h3>
-                  <span class="project-badge">Full-Stack</span>
-                </div>
-                <p class="card-description">A YouTube-like platform for uploading and streaming videos</p>
-              </div>
-              <div class="card-content">
-                <div class="tag-container">
-                  <span class="tag">React</span>
-                  <span class="tag">Node.js</span>
-                  <span class="tag">AWS S3</span>
-                </div>
-              </div>
-              <div class="card-footer">
-                <a href="projects/project-9.html" class="btn btn-outline btn-sm">View Project</a>
-                <a href="https://github.com/yourusername/project-9" target="_blank" rel="noopener noreferrer" class="btn btn-ghost btn-sm">View Code</a>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="project-content" id="frontend-tab">
-          <div class="project-grid">
-            <!-- Frontend Projects (3 cards) -->
-            <div class="project-card">
-              <div class="card-image">
-                <img src="https://placehold.co/300x200?text=Project+1" alt="Portfolio Website">
-              </div>
-              <div class="card-header">
-                <div class="card-title-container">
-                  <h3 class="card-title">Portfolio Website</h3>
-                  <span class="project-badge">Frontend</span>
-                </div>
-                <p class="card-description">A responsive portfolio website built with React and Tailwind CSS</p>
-              </div>
-              <div class="card-content">
-                <div class="tag-container">
-                  <span class="tag">React</span>
-                  <span class="tag">Tailwind CSS</span>
-                  <span class="tag">Framer Motion</span>
-                </div>
-              </div>
-              <div class="card-footer">
-                <a href="projects/project-1.html" class="btn btn-outline btn-sm">View Project</a>
-                <a href="https://github.com/yourusername/project-1" target="_blank" rel="noopener noreferrer" class="btn btn-ghost btn-sm">View Code</a>
-              </div>
-            </div>
-            <div class="project-card">
-              <div class="card-image">
-                <img src="https://placehold.co/300x200?text=Project+2" alt="Task Management App">
-              </div>
-              <div class="card-header">
-                <div class="card-title-container">
-                  <h3 class="card-title">Task Management App</h3>
-                  <span class="project-badge">Frontend</span>
-                </div>
-                <p class="card-description">A drag-and-drop task management application with user authentication</p>
-              </div>
-              <div class="card-content">
-                <div class="tag-container">
-                  <span class="tag">React</span>
-                  <span class="tag">Firebase</span>
-                  <span class="tag">DnD Kit</span>
-                </div>
-              </div>
-              <div class="card-footer">
-                <a href="projects/project-2.html" class="btn btn-outline btn-sm">View Project</a>
-                <a href="https://github.com/yourusername/project-2" target="_blank" rel="noopener noreferrer" class="btn btn-ghost btn-sm">View Code</a>
-              </div>
-            </div>
-            <div class="project-card">
-              <div class="card-image">
-                <img src="https://placehold.co/300x200?text=Project+3" alt="E-commerce UI">
-              </div>
-              <div class="card-header">
-                <div class="card-title-container">
-                  <h3 class="card-title">E-commerce UI</h3>
-                  <span class="project-badge">Frontend</span>
-                </div>
-                <p class="card-description">A modern e-commerce user interface with product filtering and cart functionality</p>
-              </div>
-              <div class="card-content">
-                <div class="tag-container">
-                  <span class="tag">Next.js</span>
-                  <span class="tag">Tailwind CSS</span>
-                  <span class="tag">TypeScript</span>
-                </div>
-              </div>
-              <div class="card-footer">
-                <a href="projects/project-3.html" class="btn btn-outline btn-sm">View Project</a>
-                <a href="https://github.com/yourusername/project-3" target="_blank" rel="noopener noreferrer" class="btn btn-ghost btn-sm">View Code</a>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="project-content" id="backend-tab">
-          <div class="project-grid">
-            <!-- Backend Projects (3 cards) -->
-            <div class="project-card">
-              <div class="card-image">
-                <img src="https://placehold.co/300x200?text=Project+4" alt="REST API">
-              </div>
-              <div class="card-header">
-                <div class="card-title-container">
-                  <h3 class="card-title">REST API</h3>
-                  <span class="project-badge">Backend</span>
-                </div>
-                <p class="card-description">A RESTful API for a blog platform with authentication and authorization</p>
-              </div>
-              <div class="card-content">
-                <div class="tag-container">
-                  <span class="tag">Node.js</span>
-                  <span class="tag">Express</span>
-                  <span class="tag">MongoDB</span>
-                </div>
-              </div>
-              <div class="card-footer">
-                <a href="projects/project-4.html" class="btn btn-outline btn-sm">View Project</a>
-                <a href="https://github.com/yourusername/project-4" target="_blank" rel="noopener noreferrer" class="btn btn-ghost btn-sm">View Code</a>
-              </div>
-            </div>
-            <div class="project-card">
-              <div class="card-image">
-                <img src="https://placehold.co/300x200?text=Project+5" alt="Real-time Chat Backend">
-              </div>
-              <div class="card-header">
-                <div class="card-title-container">
-                  <h3 class="card-title">Real-time Chat Backend</h3>
-                  <span class="project-badge">Backend</span>
-                </div>
-                <p class="card-description">A scalable backend for a real-time chat application</p>
-              </div>
-              <div class="card-content">
-                <div class="tag-container">
-                  <span class="tag">Node.js</span>
-                  <span class="tag">Socket.io</span>
-                  <span class="tag">Redis</span>
-                </div>
-              </div>
-              <div class="card-footer">
-                <a href="projects/project-5.html" class="btn btn-outline btn-sm">View Project</a>
-                <a href="https://github.com/yourusername/project-5" target="_blank" rel="noopener noreferrer" class="btn btn-ghost btn-sm">View Code</a>
-              </div>
-            </div>
-            <div class="project-card">
-              <div class="card-image">
-                <img src="https://placehold.co/300x200?text=Project+6" alt="GraphQL API">
-              </div>
-              <div class="card-header">
-                <div class="card-title-container">
-                  <h3 class="card-title">GraphQL API</h3>
-                  <span class="project-badge">Backend</span>
-                </div>
-                <p class="card-description">A GraphQL API for a social media platform with data relationships</p>
-              </div>
-              <div class="card-content">
-                <div class="tag-container">
-                  <span class="tag">Node.js</span>
-                  <span class="tag">Apollo</span>
-                  <span class="tag">PostgreSQL</span>
-                </div>
-              </div>
-              <div class="card-footer">
-                <a href="projects/project-6.html" class="btn btn-outline btn-sm">View Project</a>
-                <a href="https://github.com/yourusername/project-6" target="_blank" rel="noopener noreferrer" class="btn btn-ghost btn-sm">View Code</a>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="project-content" id="fullstack-tab">
-          <div class="project-grid">
-            <!-- Full-Stack Projects (3 cards) -->
-            <div class="project-card">
-              <div class="card-image">
-                <img src="https://placehold.co/300x200?text=Project+7" alt="Social Media App">
-              </div>
-              <div class="card-header">
-                <div class="card-title-container">
-                  <h3 class="card-title">Social Media App</h3>
-                  <span class="project-badge">Full-Stack</span>
-                </div>
-                <p class="card-description">A full-stack social media application with posts, comments, and likes</p>
-              </div>
-              <div class="card-content">
-                <div class="tag-container">
-                  <span class="tag">React</span>
-                  <span class="tag">Node.js</span>
-                  <span class="tag">MongoDB</span>
-                </div>
-              </div>
-              <div class="card-footer">
-                <a href="projects/project-7.html" class="btn btn-outline btn-sm">View Project</a>
-                <a href="https://github.com/yourusername/project-7" target="_blank" rel="noopener noreferrer" class="btn btn-ghost btn-sm">View Code</a>
-              </div>
-            </div>
-            <div class="project-card">
-              <div class="card-image">
-                <img src="https://placehold.co/300x200?text=Project+8" alt="Job Board">
-              </div>
-              <div class="card-header">
-                <div class="card-title-container">
-                  <h3 class="card-title">Job Board</h3>
-                  <span class="project-badge">Full-Stack</span>
-                </div>
-                <p class="card-description">A job board platform where companies can post jobs and users can apply</p>
-              </div>
-              <div class="card-content">
-                <div class="tag-container">
-                  <span class="tag">Next.js</span>
-                  <span class="tag">Node.js</span>
-                  <span class="tag">PostgreSQL</span>
-                </div>
-              </div>
-              <div class="card-footer">
-                <a href="projects/project-8.html" class="btn btn-outline btn-sm">View Project</a>
-                <a href="https://github.com/yourusername/project-8" target="_blank" rel="noopener noreferrer" class="btn btn-ghost btn-sm">View Code</a>
-              </div>
-            </div>
-            <div class="project-card">
-              <div class="card-image">
-                <img src="https://placehold.co/300x200?text=Project+9" alt="Video Streaming Platform">
-              </div>
-              <div class="card-header">
-                <div class="card-title-container">
-                  <h3 class="card-title">Video Streaming Platform</h3>
-                  <span class="project-badge">Full-Stack</span>
-                </div>
-                <p class="card-description">A YouTube-like platform for uploading and streaming videos</p>
-              </div>
-              <div class="card-content">
-                <div class="tag-container">
-                  <span class="tag">React</span>
-                  <span class="tag">Node.js</span>
-                  <span class="tag">AWS S3</span>
-                </div>
-              </div>
-              <div class="card-footer">
-                <a href="projects/project-9.html" class="btn btn-outline btn-sm">View Project</a>
-                <a href="https://github.com/yourusername/project-9" target="_blank" rel="noopener noreferrer" class="btn btn-ghost btn-sm">View Code</a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Featured Project Section -->
-    <section class="featured-project">
+    <section class="hero">
       <div class="container">
         <div class="section-header">
-          <h2 class="section-title">Featured Project</h2>
-          <p class="section-description">
-            Check out this comprehensive project that showcases multiple technologies and advanced concepts.
+          <h1 class="hero-title">Projects & Tutorials</h1>
+          <p class="hero-description">
+            Browse through my collection my hands-on projects and step-by-step tutorial to enhance your coding skils.
           </p>
         </div>
-        <div class="featured-project-grid">
-          <div class="featured-project-image">
-            <img src="https://placehold.co/600x400" alt="Featured Project" class="rounded-image">
-          </div>
-          <div class="featured-project-content">
-            <div class="featured-badge">Featured</div>
-            <h3 class="featured-title">Full-Stack E-Commerce Platform</h3>
-            <p class="featured-description">
-              A complete e-commerce solution with product management, user authentication, shopping cart, payment
-              processing, and order management.
-            </p>
-            <div class="tag-container">
-              <span class="tag">React</span>
-              <span class="tag">Next.js</span>
-              <span class="tag">Node.js</span>
-              <span class="tag">MongoDB</span>
-              <span class="tag">Stripe</span>
-            </div>
-            <div class="featured-buttons">
-              <a href="projects/ecommerce-platform.html" class="btn btn-primary">
-                View Project
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ml-2">
-                  <line x1="5" y1="12" x2="19" y2="12"></line>
-                  <polyline points="12 5 19 12 12 19"></polyline>
-                </svg>
-              </a>
-              <a href="https://github.com/yourusername/ecommerce-platform" target="_blank" rel="noopener noreferrer" class="btn btn-outline">
-                View Code
-              </a>
-            </div>
+      </div>
+    </section>
+
+ <!-- Search & Filters -->
+    <section class="max-w-7xl mx-auto px-4 py-6">
+      <input type="text" placeholder="Search projects..." class="w-full px-4 py-2 border border-gray-300 rounded-md mb-4">
+      <div class="space-x-4 text-sm font-medium">
+        <button class="px-3 py-1 bg-gray-200 rounded">All Projects</button>
+        <button class="px-3 py-1 hover:bg-gray-200 rounded">Frontend</button>
+        <button class="px-3 py-1 hover:bg-gray-200 rounded">Backend</button>
+        <button class="px-3 py-1 hover:bg-gray-200 rounded">Full-Stack</button>
+      </div>
+    </section>
+
+    <section class="max-w-7xl mx-auto px-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 pb-12">
+
+
+      <div class="bg-white p-4 rounded-lg shadow-sm border">
+        <div class="h-40 bg-gray-100 flex items-center justify-center rounded mb-4">[Image]</div>
+        <h3 class="text-lg font-semibold mb-1">Portfolio Website <span class="text-sm bg-gray-200 px-2 rounded ml-2">Frontend</span></h3>
+        <p class="text-sm text-gray-600 mb-2">A responsive portfolio website built with React and Tailwind CSS</p>
+        <div class="flex flex-wrap gap-2 text-xs text-gray-600 mb-3">
+          <span class="bg-gray-100 px-2 py-1 rounded">React</span>
+          <span class="bg-gray-100 px-2 py-1 rounded">Tailwind</span>
+          <span class="bg-gray-100 px-2 py-1 rounded">Farmer Motion</span>
+        </div>
+        <div class="flex space-x-2">
+          <a href="#" class="text-sm px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700">View Project</a>
+          <a href="#" class="text-sm px-3 py-1 border border-gray-300 rounded hover:bg-gray-100">View Code</a>
+        </div>
+      </div>
+
+      <div class="bg-white p-4 rounded-lg shadow-sm border">
+        <div class="h-40 bg-gray-100 flex items-center justify-center rounded mb-4">[Image]</div>
+        <h3 class="text-lg font-semibold mb-1">Task Management App <span class="text-sm bg-gray-200 px-2 rounded ml-2">Frontend</span></h3>
+        <p class="text-sm text-gray-600 mb-2">A drag-and-drop task management application with user authentication</p>
+        <div class="flex flex-wrap gap-2 text-xs text-gray-600 mb-3">
+          <span class="bg-gray-100 px-2 py-1 rounded">React</span>
+          <span class="bg-gray-100 px-2 py-1 rounded">Firebase</span>
+           <span class="bg-gray-100 px-2 py-1 rounded">DnD Kit</span>
+        </div>
+        <div class="flex space-x-2">
+          <a href="#" class="text-sm px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700">View Project</a>
+          <a href="#" class="text-sm px-3 py-1 border border-gray-300 rounded hover:bg-gray-100">View Code</a>
+        </div>
+      </div>
+
+      <div class="bg-white p-4 rounded-lg shadow-sm border">
+        <div class="h-40 bg-gray-100 flex items-center justify-center rounded mb-4">[Image]</div>
+        <h3 class="text-lg font-semibold mb-1">E-commerce UI <span class="text-sm bg-gray-200 px-2 rounded ml-2">Frontend</span></h3>
+        <p class="text-sm text-gray-600 mb-2">A modern e-commerce user interface with product filtering and cart functionality</p>
+        <div class="flex flex-wrap gap-2 text-xs text-gray-600 mb-3">
+          <span class="bg-gray-100 px-2 py-1 rounded">Next.js</span>
+          <span class="bg-gray-100 px-2 py-1 rounded">Tailwind CSS</span>
+          <span class="bg-gray-100 px-2 py-1 rounded">Type Script</span>
+        </div>
+        <div class="flex space-x-2">
+          <a href="#" class="text-sm px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700">View Project</a>
+          <a href="#" class="text-sm px-3 py-1 border border-gray-300 rounded hover:bg-gray-100">View Code</a>
+        </div>
+      </div>
+
+      <div class="bg-white p-4 rounded-lg shadow-sm border">
+        <div class="h-40 bg-gray-100 flex items-center justify-center rounded mb-4">[Image]</div>
+        <h3 class="text-lg font-semibold mb-1">REST API <span class="text-sm bg-gray-200 px-2 rounded ml-2">Frontend</span></h3>
+        <p class="text-sm text-gray-600 mb-2">A RESTful API for a blog platform with authentication and authorization</p>
+        <div class="flex flex-wrap gap-2 text-xs text-gray-600 mb-3">
+          <span class="bg-gray-100 px-2 py-1 rounded">Node.js</span>
+          <span class="bg-gray-100 px-2 py-1 rounded">Exprerss</span>
+          <span class="bg-gray-100 px-2 py-1 rounded">MongoDB</span>
+        </div>
+        <div class="flex space-x-2">
+          <a href="#" class="text-sm px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700">View Project</a>
+          <a href="#" class="text-sm px-3 py-1 border border-gray-300 rounded hover:bg-gray-100">View Code</a>
+        </div>
+      </div>
+
+      <div class="bg-white p-4 rounded-lg shadow-sm border">
+        <div class="h-40 bg-gray-100 flex items-center justify-center rounded mb-4">[Image]</div>
+        <h3 class="text-lg font-semibold mb-1">Real-time Chat Backend <span class="text-sm bg-gray-200 px-2 rounded ml-2">Frontend</span></h3>
+        <p class="text-sm text-gray-600 mb-2">A scalable backend for a real-time chat application</p>
+        <div class="flex flex-wrap gap-2 text-xs text-gray-600 mb-3">
+          <span class="bg-gray-100 px-2 py-1 rounded">Node.js</span>
+          <span class="bg-gray-100 px-2 py-1 rounded">Socket.io</span>
+          <span class="bg-gray-100 px-2 py-1 rounded">Redis</span>
+        </div>
+        <div class="flex space-x-2">
+          <a href="#" class="text-sm px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700">View Project</a>
+          <a href="#" class="text-sm px-3 py-1 border border-gray-300 rounded hover:bg-gray-100">View Code</a>
+        </div>
+      </div>
+
+      <div class="bg-white p-4 rounded-lg shadow-sm border">
+        <div class="h-40 bg-gray-100 flex items-center justify-center rounded mb-4">[Image]</div>
+        <h3 class="text-lg font-semibold mb-1">GraphQL API <span class="text-sm bg-gray-200 px-2 rounded ml-2">Frontend</span></h3>
+        <p class="text-sm text-gray-600 mb-2">A GraphQL API for a social media platform with data relationships</p>
+        <div class="flex flex-wrap gap-2 text-xs text-gray-600 mb-3">
+          <span class="bg-gray-100 px-2 py-1 rounded">Node.js</span>
+          <span class="bg-gray-100 px-2 py-1 rounded">Apollo</span>
+          <span class="bg-gray-100 px-2 py-1 rounded">PostgreSQL</span>
+        </div>
+        <div class="flex space-x-2">
+          <a href="#" class="text-sm px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700">View Project</a>
+          <a href="#" class="text-sm px-3 py-1 border border-gray-300 rounded hover:bg-gray-100">View Code</a>
+        </div>
+      </div>
+
+      <div class="bg-white p-4 rounded-lg shadow-sm border">
+        <div class="h-40 bg-gray-100 flex items-center justify-center rounded mb-4">[Image]</div>
+        <h3 class="text-lg font-semibold mb-1">Social Media App<span class="text-sm bg-gray-200 px-2 rounded ml-2">Frontend</span></h3>
+        <p class="text-sm text-gray-600 mb-2">A full-stack social media application with posts, comments, and likes.</p>
+        <div class="flex flex-wrap gap-2 text-xs text-gray-600 mb-3">
+          <span class="bg-gray-100 px-2 py-1 rounded">React</span>
+          <span class="bg-gray-100 px-2 py-1 rounded">Node.js</span>
+           <span class="bg-gray-100 px-2 py-1 rounded">MongoDB</span>
+        </div>
+        <div class="flex space-x-2">
+          <a href="#" class="text-sm px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700">View Project</a>
+          <a href="#" class="text-sm px-3 py-1 border border-gray-300 rounded hover:bg-gray-100">View Code</a>
+        </div>
+      </div>
+
+      <div class="bg-white p-4 rounded-lg shadow-sm border">
+        <div class="h-40 bg-gray-100 flex items-center justify-center rounded mb-4">[Image]</div>
+        <h3 class="text-lg font-semibold mb-1">Job Board <span class="text-sm bg-gray-200 px-2 rounded ml-2">Frontend</span></h3>
+        <p class="text-sm text-gray-600 mb-2">A job board platform where companies</p>
+        <div class="flex flex-wrap gap-2 text-xs text-gray-600 mb-3">
+          <span class="bg-gray-100 px-2 py-1 rounded">Next.js</span>
+          <span class="bg-gray-100 px-2 py-1 rounded">Node.js</span>
+          <span class="bg-gray-100 px-2 py-1 rounded">PostgreSQL</span>
+        </div>
+        <div class="flex space-x-2">
+          <a href="#" class="text-sm px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700">View Project</a>
+          <a href="#" class="text-sm px-3 py-1 border border-gray-300 rounded hover:bg-gray-100">View Code</a>
+        </div>
+      </div>
+
+      <div class="bg-white p-4 rounded-lg shadow-sm border">
+        <div class="h-40 bg-gray-100 flex items-center justify-center rounded mb-4">[Image]</div>
+        <h3 class="text-lg font-semibold mb-1">Video Streaming Plateform <span class="text-sm bg-gray-200 px-2 rounded ml-2">Frontend</span></h3>
+        <p class="text-sm text-gray-600 mb-2">A YouTube-like platform for uploading and streaming videos</p>
+        <div class="flex flex-wrap gap-2 text-xs text-gray-600 mb-3">
+          <span class="bg-gray-100 px-2 py-1 rounded">React</span>
+          <span class="bg-gray-100 px-2 py-1 rounded">Node.js</span>
+          <span class="bg-gray-100 px-2 py-1 rounded">AWS S3</span>
+        </div>
+        <div class="flex space-x-2">
+          <a href="#" class="text-sm px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700">View Project</a>
+          <a href="#" class="text-sm px-3 py-1 border border-gray-300 rounded hover:bg-gray-100">View Code</a>
+        </div>
+      </div>
+
+      <div class="bg-white p-4 rounded-lg shadow-sm border">
+        <div class="h-40 bg-gray-100 flex items-center justify-center rounded mb-4">[Image]</div>
+        <h3 class="text-lg font-semibold mb-1">Portfolio Website <span class="text-sm bg-gray-200 px-2 rounded ml-2">Frontend</span></h3>
+        <p class="text-sm text-gray-600 mb-2">Built with React and Tailwind CSS.</p>
+        <div class="flex flex-wrap gap-2 text-xs text-gray-600 mb-3">
+          <span class="bg-gray-100 px-2 py-1 rounded">React</span>
+          <span class="bg-gray-100 px-2 py-1 rounded">Tailwind</span>
+        </div>
+        <div class="flex space-x-2">
+          <a href="#" class="text-sm px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700">View Project</a>
+          <a href="#" class="text-sm px-3 py-1 border border-gray-300 rounded hover:bg-gray-100">View Code</a>
+        </div>
+      </div>
+
+      <div class="bg-white p-4 rounded-lg shadow-sm border">
+        <div class="h-40 bg-gray-100 flex items-center justify-center rounded mb-4">[Image]</div>
+        <h3 class="text-lg font-semibold mb-1">Portfolio Website <span class="text-sm bg-gray-200 px-2 rounded ml-2">Frontend</span></h3>
+        <p class="text-sm text-gray-600 mb-2">Built with React and Tailwind CSS.</p>
+        <div class="flex flex-wrap gap-2 text-xs text-gray-600 mb-3">
+          <span class="bg-gray-100 px-2 py-1 rounded">React</span>
+          <span class="bg-gray-100 px-2 py-1 rounded">Tailwind</span>
+        </div>
+        <div class="flex space-x-2">
+          <a href="#" class="text-sm px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700">View Project</a>
+          <a href="#" class="text-sm px-3 py-1 border border-gray-300 rounded hover:bg-gray-100">View Code</a>
+        </div>
+      </div>
+
+      <div class="bg-white p-4 rounded-lg shadow-sm border">
+        <div class="h-40 bg-gray-100 flex items-center justify-center rounded mb-4">[Image]</div>
+        <h3 class="text-lg font-semibold mb-1">Portfolio Website <span class="text-sm bg-gray-200 px-2 rounded ml-2">Frontend</span></h3>
+        <p class="text-sm text-gray-600 mb-2">Built with React and Tailwind CSS.</p>
+        <div class="flex flex-wrap gap-2 text-xs text-gray-600 mb-3">
+          <span class="bg-gray-100 px-2 py-1 rounded">React</span>
+          <span class="bg-gray-100 px-2 py-1 rounded">Tailwind</span>
+        </div>
+        <div class="flex space-x-2">
+          <a href="#" class="text-sm px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700">View Project</a>
+          <a href="#" class="text-sm px-3 py-1 border border-gray-300 rounded hover:bg-gray-100">View Code</a>
+        </div>
+      </div>
+                        </section>
+                      </section>  
+                    </section>
+                  </section>
+                </section>
+              </section>
+            </section>
+        </section>
+      </section>
+    </section>
+  </section>
+</section>
+
+    <!-- Featured Project -->
+    <section class="bg-white py-12 border-t">
+      <div class="max-w-5xl mx-auto px-4 text-center">
+        <h2 class="text-2xl font-bold mb-4">Featured Project</h2>
+        <p class="text-gray-600 mb-6">Check out this comprehensive project that showcases multiple technologies and advanced concepts.</p>
+        <div class="bg-gray-100 p-6 rounded-lg shadow-md">
+          <div class="mb-4 text-sm text-red-500 font-semibold">Featured</div>
+          <h3 class="text-xl font-bold mb-2">Full-Stack E-Commerce Platform</h3>
+          <p class="text-gray-700 mb-3">A complete solution with product management, authentication, shopping cart, and order processing.</p>
+          <div class="flex flex-wrap justify-center gap-2 text-sm">
+            <span class="bg-white px-3 py-1 rounded border">React</span>
+            <span class="bg-white px-3 py-1 rounded border">Node.js</span>
+            <span class="bg-white px-3 py-1 rounded border">MongoDB</span>
+            <span class="bg-white px-3 py-1 rounded border">Stripe</span>
           </div>
         </div>
       </div>
     </section>
-  </main>
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   <!-- Footer -->
   <footer class="site-footer">
@@ -602,7 +753,7 @@
               <polygon points="23 7 16 12 23 17 23 7"></polygon>
               <rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>
             </svg>
-            <span class="logo-text">YourChannel</span>
+            <span class="logo-text">Moh Technology</span>
           </a>
           <p class="footer-description">
             Helping developers level up their skills through practical, project-based learning.
@@ -662,7 +813,7 @@
                   <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
                   <polyline points="22,6 12,13 2,6"></polyline>
                 </svg>
-                <span>hello@yourchannel.com</span>
+                <span>mohshinmansuri123@gmail.com</span>
               </a>
             </li>
             <li>
@@ -689,26 +840,5 @@
   </footer>
 
   <script src="script.js"></script>
-  <script>
-    // Project tabs functionality
-    document.addEventListener("DOMContentLoaded", () => {
-      const projectTabs = document.querySelectorAll(".project-tab");
-      const projectContents = document.querySelectorAll(".project-content");
-
-      projectTabs.forEach((tab) => {
-        tab.addEventListener("click", () => {
-          const tabName = tab.getAttribute("data-tab");
-
-          // Remove active class from all tabs and contents
-          projectTabs.forEach((t) => t.classList.remove("active"));
-          projectContents.forEach((content) => content.classList.remove("active"));
-
-          // Add active class to current tab and content
-          tab.classList.add("active");
-          document.getElementById(`${tabName}-tab`).classList.add("active");
-        });
-      });
-    });
-  </script>
 </body>
 </html>
